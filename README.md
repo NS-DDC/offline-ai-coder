@@ -141,7 +141,7 @@ CLI 외에 IDE도 쓰고 싶을 때. 같은 Ollama 인스턴스 공유:
 - VRAM 부족. `--fast`(14B) 또는 `--tiny`(7B) 사용.
 
 **한국어 응답이 영어로 나옴**
-- 첫 메시지에 "한국어로 답변" 추가하거나, `.aider.conf.yml`에 시스템 프롬프트 추가.
+- 기본값으로 `.aider.conf.yml`에 `chat-language: korean` 설정되어 있음. 영어로 바꾸려면 해당 줄 삭제 또는 `english`로 변경.
 
 **완전 오프라인 확인**
 - 서비스 시작 후 인터넷 차단 — Aider/Ollama 모두 localhost만 사용함.

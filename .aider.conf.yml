@@ -27,6 +27,10 @@ attribute-committer: false
 map-tokens: 4096
 map-refresh: auto
 
+# --- Language -----------------------------------------------------------------
+# Force Korean responses by default. Code/identifiers stay in English.
+chat-language: korean
+
 # --- UX -----------------------------------------------------------------------
 pretty: true
 stream: true
