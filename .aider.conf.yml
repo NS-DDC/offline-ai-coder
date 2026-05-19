@@ -1,0 +1,48 @@
+# =============================================================================
+# Aider config - Offline mode with local Ollama
+# Docs: https://aider.chat/docs/config/aider_conf.html
+# =============================================================================
+
+# --- Offline / privacy --------------------------------------------------------
+analytics: false          # no telemetry
+check-update: false       # no network checks
+show-release-notes: false
+
+# --- Model defaults -----------------------------------------------------------
+# Model is set per-launch by agent.ps1 (--model flag).
+# Weak model used for commit messages, summaries (lighter is fine).
+weak-model: ollama_chat/qwen2.5-coder:14b
+editor-model: ollama_chat/qwen2.5-coder:32b
+
+# Edit format: "diff" works best for Qwen2.5-Coder
+edit-format: diff
+
+# --- Repo behavior ------------------------------------------------------------
+auto-commits: true        # auto git commit after edits
+dirty-commits: true       # commit uncommitted changes before editing
+attribute-author: false   # don't tag commits with "aider:"
+attribute-committer: false
+
+# Repository map (helps the model navigate the codebase)
+map-tokens: 4096
+map-refresh: auto
+
+# --- UX -----------------------------------------------------------------------
+pretty: true
+stream: true
+user-input-color: "#00CC00"
+assistant-output-color: "#0088CC"
+tool-output-color: "#888888"
+code-theme: "monokai"
+
+# --- Safety -------------------------------------------------------------------
+# Confirm before running shell commands the model suggests
+yes-always: false
+# Don't auto-test, but allow /test command
+auto-test: false
+
+# --- Local-only enforcement ---------------------------------------------------
+# Block accidental cloud usage by setting fake keys (any non-Ollama call will fail)
+# Comment out if you want to allow cloud fallback later.
+# openai-api-key: "offline-only"
+# anthropic-api-key: "offline-only"

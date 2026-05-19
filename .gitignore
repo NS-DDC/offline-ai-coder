@@ -1,0 +1,26 @@
+# Large binary artifacts (build/install will recreate these)
+bin/
+models/
+installers/
+.venv/
+
+# Aider cache/history
+.aider*
+!.aider.conf.yml
+
+# OMC state
+.omc/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
