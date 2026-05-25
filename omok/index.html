@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오목 - 1대1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>⚫ 오목 ⚪</h1>
+
+        <div class="score-board">
+            <div class="player-info" id="player1-info">
+                <div class="player-stone black"></div>
+                <div class="player-details">
+                    <span class="player-name">플레이어 1 (흑)</span>
+                    <span class="player-score" id="score-black">0</span>
+                </div>
+            </div>
+            <div class="vs-text">VS</div>
+            <div class="player-info" id="player2-info">
+                <div class="player-stone white"></div>
+                <div class="player-details">
+                    <span class="player-name">플레이어 2 (백)</span>
+                    <span class="player-score" id="score-white">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div id="status-message">흑의 차례입니다</div>
+        </div>
+
+        <div class="board-wrapper">
+            <canvas id="omokBoard" width="600" height="600"></canvas>
+        </div>
+
+        <div class="controls">
+            <button id="resetBtn" class="btn btn-reset">새 게임</button>
+            <button id="undoBtn" class="btn btn-undo">무르기</button>
+        </div>
+    </div>
+
+    <div id="winModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="win-stone" id="winStone"></div>
+            <h2 id="winMessage"></h2>
+            <p id="winSubMessage"></p>
+            <button id="playAgainBtn" class="btn btn-play-again">다시 하기</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
