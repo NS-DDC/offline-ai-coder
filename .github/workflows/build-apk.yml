@@ -1,0 +1,99 @@
+name: 🎮 Build Omok APK
+
+on:
+  push:
+    branches:
+      - 'claude/omok-1v1-app-othrY'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Accept Android SDK licenses
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses 2>/dev/null || \
+          yes | "$ANDROID_HOME/tools/bin/sdkmanager" --licenses 2>/dev/null || true
+
+      - name: Install Cordova
+        run: npm install -g cordova@12
+
+      - name: Create Cordova project
+        run: cordova create omok-build com.omokgame.app OmokGame
+
+      - name: Copy game assets and config
+        run: |
+          rm -rf omok-build/www/*
+          cp omok/index.html          omok-build/www/
+          cp omok/style.css           omok-build/www/
+          cp omok/game.js             omok-build/www/
+          cp omok/cordova-config.xml  omok-build/config.xml
+
+      - name: Add Android platform
+        working-directory: omok-build
+        run: cordova platform add android
+
+      - name: Build debug APK
+        working-directory: omok-build
+        run: cordova build android --debug
+
+      - name: Collect APK
+        run: |
+          mkdir -p dist
+          cp omok-build/platforms/android/app/build/outputs/apk/debug/app-debug.apk \
+             dist/omok-game.apk
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: omok-game-apk
+          path: dist/omok-game.apk
+          if-no-files-found: error
+
+      - name: Get short SHA
+        id: meta
+        run: echo "sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: omok-v1.0-${{ steps.meta.outputs.sha }}
+          name: "🎮 오목게임 v1.0"
+          body: |
+            ## 🎮 오목 1대1 게임 — Android APK
+
+            ### 📥 설치 방법
+            1. 아래 **Assets** 에서 `omok-game.apk` 다운로드
+            2. 안드로이드 설정 → 보안 → **알 수 없는 앱 설치** 허용
+            3. 다운로드한 APK 실행 → 설치
+
+            ### 🕹️ 게임 기능
+            - 15 × 15 오목판 (나몴 질감)
+            - ⚫ 흑 / ⚪ 백 2인 플레이
+            - 5목 승리 자동 감지 + 붉은 승리선
+            - 마지막 착수 위치 표시
+            - 무르기(한 수 되돌리기)
+            - 누적 점수 기록
+            - 모바일 터치 지원
+
+            > ⚠️ Debug 빌드입니다. 설치 전 **알 수 없는 출처 앱 허용** 설정이 필요합니다.
+          files: dist/omok-game.apk
