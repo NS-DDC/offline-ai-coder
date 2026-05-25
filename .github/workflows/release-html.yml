@@ -1,0 +1,52 @@
+name: 🎮 Release Omok HTML
+
+on:
+  push:
+    branches:
+      - 'claude/omok-1v1-app-othrY'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Release HTML
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build self-contained HTML
+        run: python3 scripts/build_html.py
+
+      - name: Get short SHA
+        id: meta
+        run: echo "sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: omok-game-html
+          path: omok-game.html
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: omok-v1.0-${{ steps.meta.outputs.sha }}
+          name: "🎮 오목게임 v1.0"
+          body: |
+            ## 🎮 오목 1대1 게임
+
+            ### 📥 사용 방법
+            1. 아래 **Assets** → `omok-game.html` 다운로드
+            2. 파일 열면 **즉시 실행!** (설치·인터넷 불필요)
+
+            ### 🕹️ 기능
+            - 15×15 오목판 (나몴 질감)
+            - ⚫ 흑 / ⚪ 백 2인 플레이
+            - 5목 승리 자동 감지 + 승리선 하이라이트
+            - 무르기 (한 수 되돌리기)
+            - 라운드 점수 기록
+            - 모바일 터치 지원
+          files: omok-game.html
